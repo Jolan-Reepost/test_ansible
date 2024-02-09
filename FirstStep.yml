@@ -1,6 +1,29 @@
-- name: Test 228
-  hosts: localhost
+- name: Configuration de la communication avec Windows
+  hosts: windows
+  gather_facts: no
   tasks:
-    - name: Afficher un simple message
-      debug:
-        msg: "Bonjour, monde !"
+    - name: Installer les dépendances pour WinRM
+      become: yes
+      apt:
+        name:
+          - python3-pip
+          - python3-setuptools
+      when: ansible_distribution == 'Ubuntu'  # Si vous utilisez une distribution basée sur Ubuntu
+
+    - name: Installer les dépendances pour WinRM
+      become: yes
+      yum:
+        name: python3-pip
+      when: ansible_distribution == 'CentOS'  # Si vous utilisez une distribution basée sur CentOS
+
+    - name: Installer pywinrm pour la communication avec Windows
+      pip:
+        name: pywinrm
+        state: present
+
+- name: Exemple de tâche sur Windows
+  hosts: windows
+  tasks:
+    - name: Exemple de commande PowerShell sur Windows
+      win_shell: |
+        Get-Service
