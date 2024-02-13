@@ -1,6 +1,8 @@
 ---
 - name: Installer PyMuPDF sur Windows
   hosts: windows
+  become: false
+  gather_facts: false
   tasks:
     - name: Installer PyMuPDF via pip
       win_shell: pip install pymupdf
